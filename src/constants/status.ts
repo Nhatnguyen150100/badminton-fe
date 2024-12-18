@@ -1,0 +1,15 @@
+import { IScheduleStatus, IStatusPost } from "../types/status.types";
+
+const DEFINE_STATUS: IStatusPost = {
+  PENDING_APPROVAL: "PENDING_APPROVAL",
+  ACCEPTED: "ACCEPTED",
+  DENIED: "DENIED",
+  CANCELED: "CANCELED",
+};
+
+const DEFINE_SCHEDULE_STATUS: IScheduleStatus = {
+  AVAILABLE: "AVAILABLE",
+  NOT_AVAILABLE: "NOT_AVAILABLE",
+}
+
+export { DEFINE_STATUS, DEFINE_SCHEDULE_STATUS };
