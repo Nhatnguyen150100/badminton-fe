@@ -1,10 +1,12 @@
 import * as React from 'react';
 import { useSelector } from 'react-redux';
-import { IRootState } from '../../lib/store';
-import { formatCurrencyVND } from '../../utils/functions/format-money';
-import { IUser } from '../../types/user.types';
-import { profileService } from '../../services';
+import { IRootState } from '../../../lib/store';
+import { formatCurrencyVND } from '../../../utils/functions/format-money';
+import { IUser } from '../../../types/user.types';
+import { profileService } from '../../../services';
 import { Spin } from 'antd';
+import Visibility from '../../../components/base/visibility';
+import TransactionHistory from './TransactionHistory';
 
 export default function AccountBalanceAdmin() {
   const user = useSelector((state: IRootState) => state.user);
@@ -34,10 +36,15 @@ export default function AccountBalanceAdmin() {
 
   return (
     <div className="flex flex-col justify-start items-start space-y-3">
-      <label className='text-xl'>
+      <label className="text-xl">
         Tổng số tiền đã nhận chiết khấu:{' '}
-        <span className='text-green-800 font-semibold'>{formatCurrencyVND(userInfo.accountBalance ?? 0)}</span>
+        <Visibility visibility={!loading} suspenseComponent={<Spin />}>
+          <span className="text-green-800 font-semibold">
+            {formatCurrencyVND(userInfo.accountBalance ?? 0)}
+          </span>
+        </Visibility>
       </label>
+      <TransactionHistory />
     </div>
   );
 }
