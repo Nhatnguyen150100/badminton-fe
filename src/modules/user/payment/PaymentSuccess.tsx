@@ -1,17 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { Result } from 'antd';
-import { useNavigate } from 'react-router-dom';
-
+import { DEFINE_ROUTERS_USER } from '../../../constants/routers-mapper';
 export default function PaymentSuccess() {
   const [countdown, setCountdown] = useState(5);
-  const navigate = useNavigate();
 
   useEffect(() => {
     const timer = setInterval(() => {
       setCountdown((prev) => {
         if (prev <= 1) {
           clearInterval(timer);
-          navigate('/');
+          window.open(DEFINE_ROUTERS_USER.home);
           return 0;
         }
         return prev - 1;

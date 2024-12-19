@@ -25,6 +25,7 @@ import CourtDetail from '../modules/admin/CourtDetail';
 import TheLayoutAdmin from '../modules/admin/layout/TheLayoutAdmin';
 import AccountBalanceAdmin from '../modules/admin/account-balance-admin/AccountBalanceAdmin';
 import PaymentSuccess from '../modules/user/payment/PaymentSuccess';
+import PaymentError from '../modules/user/payment/PaymentError';
 
 const router = createBrowserRouter([
   {
@@ -44,6 +45,10 @@ const router = createBrowserRouter([
       {
         path: DEFINE_ROUTERS_USER.paymentSuccess,
         element: <PaymentSuccess />,
+      },
+      {
+        path: DEFINE_ROUTERS_USER.paymentError,
+        element: <PaymentError />,
       },
       {
         path: DEFINE_ROUTERS_USER.gatherPostDetail,
