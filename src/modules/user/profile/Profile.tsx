@@ -8,6 +8,7 @@ import {
   FormProps,
   Input,
   InputNumber,
+  message,
   Radio,
   Spin,
 } from 'antd';
@@ -20,13 +21,16 @@ import AvatarUpload from '../../../components/common/AvatarUpload';
 import { useNavigate } from 'react-router-dom';
 import { formatter, parser } from '../../../utils/input-format-money';
 import { IUser } from '../../../types/user.types';
+import { formatCurrencyVND } from '../../../utils/functions/format-money';
+import { MoneyCollectOutlined } from '@ant-design/icons';
+import BaseModal from '../../../components/base/BaseModal';
+import paymentService from '../../../services/paymentService';
 
 type FieldType = {
   email: string;
   fullName?: string;
   gender?: string;
   phoneNumber?: number;
-  accountBalance?: number;
 };
 
 export default function Profile() {
@@ -36,7 +40,10 @@ export default function Profile() {
   const [userInfo, setUserInfo] = React.useState<IUser>();
   const dispatch = useDispatch();
   const [loading, setLoading] = React.useState(false);
+  const [loadingPosition, setLoadingPosition] = React.useState<boolean>(false);
   const [currentAvatar, setCurrentAvatar] = React.useState<string | null>();
+  const [openModal, setOpenModal] = React.useState<boolean>(false);
+  const [currentMoney, setCurrentMoney] = React.useState<number>();
   const navigate = useNavigate();
 
   const handleGetProfile = async () => {
@@ -63,7 +70,6 @@ export default function Profile() {
       formData.append('fullName', data.fullName!);
       formData.append('gender', data.gender!);
       formData.append('phoneNumber', data.phoneNumber!.toString());
-      formData.append('accountBalance', data.accountBalance!.toString());
       const rs = await profileService.updateProfile(user.id, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
@@ -80,6 +86,28 @@ export default function Profile() {
   const handleUploadFile = async (file: File | undefined) => {
     setFile(file);
     setCurrentAvatar(null);
+  };
+
+  const handleCreatePayment = async () => {
+    if (!currentMoney) {
+      message.error('Vui lòng nhập số tiền để thanh toán');
+      return;
+    }
+    try {
+      setLoadingPosition(true);
+      const rs = await paymentService.createPayment({
+        id: user.id,
+        amount: currentMoney,
+      });
+      const urlPayment = rs.data;
+      window.open(urlPayment, '_self');
+      setOpenModal(false);
+      setCurrentMoney(undefined);
+    } catch (error: any) {
+      message.error(error.message);
+    } finally {
+      setLoadingPosition(false);
+    }
   };
 
   if (!userInfo?.id)
@@ -103,16 +131,35 @@ export default function Profile() {
           fullName: userInfo?.fullName,
           gender: userInfo?.gender ?? 'Male',
           phoneNumber: userInfo?.phoneNumber,
-          accountBalance: userInfo?.accountBalance,
         }}
         autoComplete="off"
       >
         <Form.Item<any> label="Ảnh đại diện">
-          <AvatarUpload
-            avatar={currentAvatar ?? null}
-            file={file}
-            handleUploadFile={handleUploadFile}
-          />
+          <div className="flex flex-row justify-between items-start">
+            <AvatarUpload
+              avatar={currentAvatar ?? null}
+              file={file}
+              handleUploadFile={handleUploadFile}
+            />
+            <div className="flex flex-col justify-start items-end space-y-3">
+              <div className="flex flex-row justify-start items-center space-x-3">
+                <span className="text-xl">Số dư tài khoản:</span>
+                <span className="text-green-800 text-xl font-bold">
+                  {formatCurrencyVND(userInfo?.accountBalance ?? 0)}
+                </span>
+              </div>
+              <Button
+                variant="filled"
+                type="primary"
+                onClick={() => {
+                  setOpenModal(true);
+                }}
+                icon={<MoneyCollectOutlined />}
+              >
+                Nạp tiền
+              </Button>
+            </div>
+          </div>
         </Form.Item>
 
         <Form.Item<FieldType>
@@ -150,20 +197,6 @@ export default function Profile() {
           <Input type="number" />
         </Form.Item>
 
-        <Form.Item<FieldType>
-          label="Số dư tài khoản"
-          name="accountBalance"
-          rules={[
-            { required: true, message: 'Hãy nhập số tiền có trong tài khoản' },
-          ]}
-        >
-          <InputNumber
-            className="w-full"
-            formatter={formatter}
-            parser={parser}
-          />
-        </Form.Item>
-
         <div className="w-full flex justify-end items-end">
           <Button type="primary" htmlType="submit">
             Cập nhật thông tin người dùng
@@ -171,6 +204,31 @@ export default function Profile() {
         </div>
       </Form>
       <GeneralLoading isLoading={loading} />
+      <BaseModal
+        isOpen={openModal}
+        loading={loadingPosition}
+        title="Nạp tiền vào tài khoản"
+        onOk={handleCreatePayment}
+        handleClose={() => {
+          setOpenModal(false);
+          setCurrentMoney(undefined);
+        }}
+      >
+        <InputNumber
+          className="w-full"
+          min={0}
+          value={currentMoney}
+          formatter={formatter}
+          parser={parser}
+          onChange={(value) => {
+            setCurrentMoney(value as number);
+          }}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') handleCreatePayment();
+          }}
+          placeholder="Hãy nhập số tiền cần nạp"
+        />
+      </BaseModal>
     </div>
   );
 }

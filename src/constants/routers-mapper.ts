@@ -21,6 +21,8 @@ const DEFINE_ROUTERS_USER = {
   listGatherPost: '/gather-post',
   userBooking: '/my-booking',
   gatherBooking: '/gather-booking',
+  paymentSuccess: '/payment-success',
+  paymentError: '/payment-error',
 };
 
 export { DEFINE_ROUTERS_ADMIN, DEFINE_ROUTERS_USER };
