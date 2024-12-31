@@ -21,6 +21,7 @@ import { IRootState } from '../../../../lib/store';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import TextArea from 'antd/es/input/TextArea';
+import dayjs from 'dayjs';
 
 export default function GatherPostDetail() {
   const { id } = useParams<{ id: string }>();
@@ -251,26 +252,42 @@ export default function GatherPostDetail() {
             </span>
           </div>
         </div>
-        <Visibility visibility={!(gatherDetail?.totalMale === 0 || gatherDetail?.totalFemale === 0)} suspenseComponent={
-          <div className='py-2 px-5 min-w-[520px] rounded-lg bg-red-600 text-white text-center cursor-not-allowed'>
-            Số lượng người đăng kí đã đủ. Không nhận đăng kí thêm
-          </div>
-        }>
-
-        <Button
-          type="primary"
-          variant="filled"
-          className="h-[40px] min-w-[280px]"
-          onClick={() => {
-            if (user.id === gatherDetail?.userId) {
-              message.error('Bạn không thể đặt lịch cho chính bạn!');
-              return;
-            }
-            setOpenModel(true);
-          }}
+        <Visibility
+          visibility={
+            !(gatherDetail?.totalMale === 0 || gatherDetail?.totalFemale === 0)
+          }
+          suspenseComponent={
+            <div className="py-2 px-5 min-w-[520px] rounded-lg bg-red-600 text-white text-center cursor-not-allowed">
+              Số lượng người đăng kí đã đủ. Không nhận đăng kí thêm
+            </div>
+          }
         >
-          Đăng kí tham gia
-        </Button>
+          <Visibility
+            visibility={
+              dayjs(gatherDetail?.appointmentDate).isSame(dayjs(), 'day') ||
+              dayjs(gatherDetail?.appointmentDate).isAfter(dayjs())
+            }
+            suspenseComponent={
+              <div className="py-2 px-5 min-w-[520px] rounded-lg bg-red-600 text-white text-center cursor-not-allowed">
+                Quá hạn ngày đăng kí
+              </div>
+            }
+          >
+            <Button
+              type="primary"
+              variant="filled"
+              className="h-[40px] min-w-[280px]"
+              onClick={() => {
+                if (user.id === gatherDetail?.userId) {
+                  message.error('Bạn không thể đặt lịch cho chính bạn!');
+                  return;
+                }
+                setOpenModel(true);
+              }}
+            >
+              Đăng kí tham gia
+            </Button>
+          </Visibility>
         </Visibility>
         <h1 className="text-start font-bold text-2xl w-full uppercase mt-5">
           Vị trí sân cầu {gatherDetail?.badmintonCourtName} trên bản đồ

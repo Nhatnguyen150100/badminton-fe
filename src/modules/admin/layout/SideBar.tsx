@@ -19,6 +19,11 @@ const Sidebar = () => {
       icon: <PieChartOutlined />,
     },
     {
+      path: DEFINE_ROUTERS_ADMIN.gatherManager,
+      label: 'Quản lý tin giao lưu',
+      icon: <PieChartOutlined />,
+    },
+    {
       path: DEFINE_ROUTERS_ADMIN.accountBalance,
       label: 'Số dư tài khoản chiết khấu',
       icon: <PieChartOutlined />,

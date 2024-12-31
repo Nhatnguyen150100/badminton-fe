@@ -2,6 +2,7 @@ const DEFINE_ROUTERS_ADMIN = {
   home: '/admin',
   accountBalance: '/admin/accountBalance',
   courtManager: '/admin/court-manager',
+  gatherManager: '/admin/gather-manager',
   courtDetail: '/admin/court-detail/:id',
   loginAdmin: '/login-admin',
 };

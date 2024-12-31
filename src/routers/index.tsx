@@ -26,6 +26,7 @@ import TheLayoutAdmin from '../modules/admin/layout/TheLayoutAdmin';
 import AccountBalanceAdmin from '../modules/admin/account-balance-admin/AccountBalanceAdmin';
 import PaymentSuccess from '../modules/user/payment/PaymentSuccess';
 import PaymentError from '../modules/user/payment/PaymentError';
+import GatherManager from '../modules/admin/gather-manager/GatherManager';
 
 const router = createBrowserRouter([
   {
@@ -103,6 +104,10 @@ const router = createBrowserRouter([
       {
         index: true,
         element: <AdminPage />,
+      },
+      {
+        path: DEFINE_ROUTERS_ADMIN.gatherManager,
+        element: <GatherManager />,
       },
       {
         path: DEFINE_ROUTERS_ADMIN.courtDetail,
