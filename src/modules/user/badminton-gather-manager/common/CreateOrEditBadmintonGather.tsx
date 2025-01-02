@@ -29,6 +29,7 @@ import { DEFINE_STATUS } from '../../../../constants/status';
 import { IUserBookingDetail } from '../../../../types/userBooking.types';
 import Visibility from '../../../../components/base/visibility';
 import { formatter, parser } from '../../../../utils/input-format-money';
+import VideoUpload from '../../../../components/base/VideoUpload';
 
 interface IProps {
   badmintonGather?: IBadmintonGather;
@@ -375,9 +376,9 @@ export default function CreateOrEditBadmintonGather({
                 </div>
               }
             >
-              <ImgUpload
+              <VideoUpload
                 disabled={Boolean(selectedScheduleId)}
-                imgProps={currentImg}
+                videoProps={currentImg}
                 file={file}
                 handleUploadFile={handleUploadFile}
               />

@@ -17,8 +17,6 @@ export default function CreateBadmintonGather() {
       const rs = await badmintonGatherService.createBadmintonGather(data);
       toast.success(rs.message);
       navigate(-1);
-    } catch (error: any) {
-      toast.error(error.message);
     } finally {
       setLoading(false);
     }

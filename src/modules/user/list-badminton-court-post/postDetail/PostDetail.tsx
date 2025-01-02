@@ -44,7 +44,8 @@ export default function PostDetail() {
       >
         <img
           crossOrigin="anonymous"
-          className="max-h-[240px] rounded-2xl object-contain"
+          width="1120"
+          className="rounded-2xl object-contain"
           src={courtDetail?.imageCourt}
           alt="Ảnh sân cầu"
         />

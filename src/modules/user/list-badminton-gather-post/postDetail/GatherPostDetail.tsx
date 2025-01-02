@@ -112,12 +112,10 @@ export default function GatherPostDetail() {
         visibility={Boolean(gatherDetail)}
         suspenseComponent={loading ? <Spin /> : <Empty />}
       >
-        <img
-          crossOrigin="anonymous"
-          className="max-h-[240px] rounded-2xl object-contain"
-          src={gatherDetail?.imgCourt}
-          alt="Ảnh sân cầu"
-        />
+        <video width="1120" controls>
+          <source src={gatherDetail?.imgCourt} type="video/mp4" />
+          Trình duyệt của bạn không hỗ trợ video.
+        </video>
         <h1 className="text-start font-bold text-2xl w-full uppercase mt-5">
           {gatherDetail?.nameClub}
         </h1>
