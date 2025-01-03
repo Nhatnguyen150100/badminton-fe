@@ -1,8 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import { Result } from 'antd';
 import { DEFINE_ROUTERS_USER } from '../../../constants/routers-mapper';
+import { useDispatch, useSelector } from 'react-redux';
+import { IRootState } from '../../../lib/store';
+import { profileService } from '../../../services';
+import { setUser } from '../../../lib/reducer/userSlice';
 export default function PaymentSuccess() {
+  const user = useSelector((state: IRootState) => state.user);
+  const dispatch = useDispatch();
   const [countdown, setCountdown] = useState(5);
+
+  const handleGetProfile = async () => {
+    const rs = await profileService.getProfile(user.id);
+    dispatch(setUser(rs.data));
+  };
+
+  React.useEffect(() => {
+    if (user.id) handleGetProfile();
+  }, [user.id]);
 
   useEffect(() => {
     const timer = setInterval(() => {
