@@ -24,7 +24,7 @@ export default function PaymentSuccess() {
       setCountdown((prev) => {
         if (prev <= 1) {
           clearInterval(timer);
-          window.open(DEFINE_ROUTERS_USER.home);
+          window.open(DEFINE_ROUTERS_USER.home, '_self');
           return 0;
         }
         return prev - 1;
